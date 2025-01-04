@@ -1,0 +1,52 @@
+<script>
+    const apiUrl = "http://localhost:3000";
+
+    function loadQuestions() {
+        fetch(`${apiUrl}/questions`)
+            .then(response => response.json())
+            .then(data => {
+                let responsesContainer = document.getElementById('responses');
+                responsesContainer.innerHTML = '';
+
+                data.forEach((response) => {
+                    let div = document.createElement('div');
+                    div.classList.add('response');
+                    div.innerHTML = `
+                        <strong>${response.username} (Asked on ${response.date}):</strong>
+                        <p>${response.question}</p>
+                        <strong>Response:</strong>
+                        <p>${response.answer || 'No response yet'}</p>
+                        ${response.answer ? '' : `
+                            <textarea id="answer-${response.id}" placeholder="Your answer"></textarea>
+                            <input type="text" id="admin-username-${response.id}" placeholder="Admin Username">
+                            <input type="password" id="admin-password-${response.id}" placeholder="Admin Password">
+                            <button onclick="submitAnswer(${response.id})">Submit Answer</button>
+                        `}
+                    `;
+                    responsesContainer.appendChild(div);
+                });
+            });
+    }
+
+    function submitAnswer(questionId) {
+        let answer = document.getElementById(`answer-${questionId}`).value;
+        let adminUsername = document.getElementById(`admin-username-${questionId}`).value;
+        let adminPassword = document.getElementById(`admin-password-${questionId}`).value;
+
+        fetch(`${apiUrl}/answer`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ questionId, answer, adminUsername, adminPassword })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    loadQuestions();
+                } else {
+                    alert("Invalid credentials or failed to submit answer.");
+                }
+            });
+    }
+
+    loadQuestions();
+</script>
