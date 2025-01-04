@@ -51,29 +51,42 @@
 <body>
     <div id="login-box">
         <p>Enter the credentials to proceed:</p>
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-        <button id="login-button">Login</button>
-        <div id="login-error">Incorrect credentials. Try again.</div>
+        <input type="text" id="a1" placeholder="Username">
+        <input type="password" id="a2" placeholder="Password">
+        <button id="a3">Login</button>
+        <div id="a4">Incorrect credentials. Try again.</div>
     </div>
 
     <script>
-        document.getElementById('login-button').addEventListener('click', function() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+        function z(a) {
+            var b = '';
+            for (var i = 0; i < a.length; i++) {
+                b += String.fromCharCode(a.charCodeAt(i) ^ 42); // XOR encoding
+            }
+            return b;
+        }
 
-            // Correct credentials (updated to match input)
-            const correctUsername = 'L0nesh00!er';
-            const correctPassword = 'S4turn';
+        document.getElementById('a3').addEventListener('click', function() {
+            var c1 = document.getElementById('a1').value;
+            var c2 = document.getElementById('a2').value;
 
-            if (username === correctUsername && password === correctPassword) {
+            // Encrypted (XOR encoded) credentials
+            var e1 = 'M9iO5oFQ=';
+            var e2 = 'S0qFrbgz';
+
+            // Decrypt the username and password
+            var d1 = z(atob(e1)); 
+            var d2 = z(atob(e2));
+
+            if (c1 === d1 && c2 === d2) {
                 alert('Access Granted');
                 document.body.innerHTML = '<h1>Welcome to the Unknown</h1>';
             } else {
-                const errorBox = document.getElementById('login-error');
-                errorBox.style.display = 'block';
+                var err = document.getElementById('a4');
+                err.style.display = 'block';
             }
         });
     </script>
 </body>
 </html>
+
