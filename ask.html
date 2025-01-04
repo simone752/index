@@ -1,47 +1,103 @@
-<script>
-    const apiUrl = "https://index-fnnc.onrender.com"; // Backend server URL
-
-    function loadQuestions() {
-        fetch(`${apiUrl}/questions`)
-            .then(response => response.json())
-            .then(data => {
-                let responsesContainer = document.getElementById('responses');
-                responsesContainer.innerHTML = '';
-
-                data.forEach((response) => {
-                    let div = document.createElement('div');
-                    div.classList.add('response');
-                    div.innerHTML = `
-                        <strong>${response.username} (Asked on ${response.date}):</strong>
-                        <p>${response.question}</p>
-                        <strong>Response:</strong>
-                        <p>${response.answer || 'No response yet'}</p>
-                    `;
-                    responsesContainer.appendChild(div);
-                });
-            });
-    }
-
-    document.getElementById('ask-button').addEventListener('click', function () {
-        let username = document.getElementById('username').value;
-        let question = document.getElementById('question').value;
-
-        if (username && question) {
-            fetch(`${apiUrl}/questions`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, question })
-            })
-                .then(() => {
-                    document.getElementById('username').value = '';
-                    document.getElementById('question').value = '';
-                    loadQuestions();
-                });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask a Question</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
         }
-    });
+        #form-container, #questions {
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+        }
+        button {
+            background: #222;
+            border: 1px solid #f00;
+            color: #f00;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        a {
+            color: #f00;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ask a Question</h1>
+    <a href="index.html">Home</a>
+    <div id="form-container">
+        <label for="username">Username:</label>
+        <input type="text" id="username" maxlength="20" placeholder="Enter your username">
+        <label for="question">Question:</label>
+        <textarea id="question" placeholder="Type your question here"></textarea>
+        <button id="submit-button">Submit</button>
+    </div>
+    <div id="questions"></div>
+    <script>
+        const apiUrl = "https://index-fnnc.onrender.com"; // Replace with your backend URL
 
-    loadQuestions();
-</script>
+        // Submit question
+        document.getElementById("submit-button").addEventListener("click", () => {
+            const username = document.getElementById("username").value;
+            const question = document.getElementById("question").value;
 
+            if (!username || !question) {
+                alert("Both username and question are required!");
+                return;
+            }
 
+            fetch(`${apiUrl}/questions`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username,
+                    question,
+                    date: new Date().toISOString(),
+                }),
+            })
+                .then((response) => response.json())
+                .then(() => {
+                    location.reload();
+                })
+                .catch((error) => console.error("Error submitting question:", error));
+        });
 
+        // Fetch and display questions
+        fetch(`${apiUrl}/questions`)
+            .then((response) => response.json())
+            .then((questions) => {
+                const questionList = document.getElementById("questions");
+                questionList.innerHTML = ""; // Clear existing questions
+                questions.forEach((q) => {
+                    const questionDiv = document.createElement("div");
+                    questionDiv.innerHTML = `
+                        <p><strong>${q.username}</strong> (${q.date}):</p>
+                        <p>${q.question}</p>
+                        ${q.answer ? `<p><em>Answer: ${q.answer}</em></p>` : ""}
+                    `;
+                    questionList.appendChild(questionDiv);
+                });
+            })
+            .catch((error) => console.error("Error fetching questions:", error));
+    </script>
+</body>
+</html>
