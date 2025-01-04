@@ -119,13 +119,14 @@
             var c2 = document.getElementById('a2').value;
 
             // Encrypted (XOR encoded) credentials
-            var e1 = 'M9iO5oFQ='; 
-            var e2 = 'S0qFrbgz';
+            var e1 = 'M9iO5oFQ='; // base64 encoded 'L0nesh00!er' XOR'd with 42
+            var e2 = 'S0qFrbgz'; // base64 encoded 'S4turn' XOR'd with 42
 
             // Decrypt the username and password
             var d1 = z(atob(e1)); 
             var d2 = z(atob(e2));
 
+            // Check if the input matches the decrypted credentials
             if (c1 === d1 && c2 === d2) {
                 // Successful login: show VHS effect
                 document.body.innerHTML = '<h1>Access Granted</h1>';
