@@ -17,7 +17,6 @@
             align-items: center;
             height: 100vh;
             text-align: center;
-            overflow: hidden;
         }
 
         #ask-box {
@@ -59,47 +58,76 @@
             border: 1px solid #f00;
         }
 
-        #black-sun {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 50px;
-            height: 50px;
-            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Black_Sun_symbol.svg/1200px-Black_Sun_symbol.svg.png') no-repeat center;
-            background-size: contain;
+        button:hover {
+            background: #f00;
+            color: #fff;
+        }
+
+        button {
+            background: #222;
+        }
+
+        #home-button {
+            margin-top: 20px;
+            background: #f00;
+            color: #fff;
         }
     </style>
 </head>
 <body>
-    <div id="black-sun"></div>
     <div id="ask-box">
         <p>Ask a question or leave a comment:</p>
         <input type="text" id="username" placeholder="Your Username (Max 20 characters)" maxlength="20">
         <textarea id="question" placeholder="Type your question here"></textarea>
         <button id="ask-button">Submit</button>
+        <button id="home-button" onclick="window.location.href='index.html'">Home</button>
         <div id="responses"></div>
     </div>
 
     <script>
+        function loadQuestions() {
+            let storedResponses = JSON.parse(localStorage.getItem('responses')) || [];
+            let responsesContainer = document.getElementById('responses');
+            responsesContainer.innerHTML = ''; // Clear previous content
+            storedResponses.forEach(response => {
+                let div = document.createElement('div');
+                div.classList.add('response');
+                div.innerHTML = `
+                    <strong>${response.username} (Asked on ${response.date}):</strong>
+                    <p>${response.question}</p>
+                    <strong>Response:</strong>
+                    <p>${response.answer}</p>
+                `;
+                responsesContainer.appendChild(div);
+            });
+        }
+
         document.getElementById('ask-button').addEventListener('click', function() {
-            var username = document.getElementById('username').value;
-            var question = document.getElementById('question').value;
-            var responses = document.getElementById('responses');
+            let username = document.getElementById('username').value;
+            let question = document.getElementById('question').value;
 
             if (username && question) {
-                var currentDate = new Date();
-                var formattedDate = currentDate.toLocaleString();
+                let currentDate = new Date().toLocaleString();
+                let newResponse = {
+                    username: username,
+                    question: question,
+                    date: currentDate,
+                    answer: "Thank you for your question. It will be answered soon..."
+                };
 
-                var newResponse = document.createElement('div');
-                newResponse.classList.add('response');
-                newResponse.innerHTML = `<strong>${username} (Asked on ${formattedDate}):</strong><p>${question}</p><strong>Response:</strong><p>Thank you for your question. It will be answered soon...</p>`;
-                responses.appendChild(newResponse);
+                let storedResponses = JSON.parse(localStorage.getItem('responses')) || [];
+                storedResponses.push(newResponse);
+                localStorage.setItem('responses', JSON.stringify(storedResponses));
 
                 document.getElementById('username').value = '';
                 document.getElementById('question').value = '';
+                loadQuestions();
             }
         });
+
+        loadQuestions();
     </script>
 </body>
 </html>
+
 
