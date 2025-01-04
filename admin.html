@@ -1,52 +1,92 @@
-<script>
-    const apiUrl = "http://localhost:3000";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+        }
+        #questions {
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+        }
+        button {
+            background: #222;
+            border: 1px solid #f00;
+            color: #f00;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        a {
+            color: #f00;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Panel</h1>
+    <a href="index.html">Home</a>
+    <div id="questions"></div>
+    <script>
+        const apiUrl = "https://index-fnnc.onrender.com"; // Replace with your backend URL
 
-    function loadQuestions() {
+        // Fetch and display questions for the admin
         fetch(`${apiUrl}/questions`)
-            .then(response => response.json())
-            .then(data => {
-                let responsesContainer = document.getElementById('responses');
-                responsesContainer.innerHTML = '';
-
-                data.forEach((response) => {
-                    let div = document.createElement('div');
-                    div.classList.add('response');
-                    div.innerHTML = `
-                        <strong>${response.username} (Asked on ${response.date}):</strong>
-                        <p>${response.question}</p>
-                        <strong>Response:</strong>
-                        <p>${response.answer || 'No response yet'}</p>
-                        ${response.answer ? '' : `
-                            <textarea id="answer-${response.id}" placeholder="Your answer"></textarea>
-                            <input type="text" id="admin-username-${response.id}" placeholder="Admin Username">
-                            <input type="password" id="admin-password-${response.id}" placeholder="Admin Password">
-                            <button onclick="submitAnswer(${response.id})">Submit Answer</button>
-                        `}
+            .then((response) => response.json())
+            .then((questions) => {
+                const questionList = document.getElementById("questions");
+                questionList.innerHTML = ""; // Clear existing questions
+                questions.forEach((q) => {
+                    const questionDiv = document.createElement("div");
+                    questionDiv.innerHTML = `
+                        <p><strong>${q.username}</strong> (${q.date}):</p>
+                        <p>${q.question}</p>
+                        <textarea placeholder="Enter your answer here"></textarea>
+                        <button onclick="submitAnswer(${q.id}, this)">Submit Answer</button>
+                        ${q.answer ? `<p><em>Answer: ${q.answer}</em></p>` : ""}
                     `;
-                    responsesContainer.appendChild(div);
+                    questionList.appendChild(questionDiv);
                 });
-            });
-    }
+            })
+            .catch((error) => console.error("Error fetching questions:", error));
 
-    function submitAnswer(questionId) {
-        let answer = document.getElementById(`answer-${questionId}`).value;
-        let adminUsername = document.getElementById(`admin-username-${questionId}`).value;
-        let adminPassword = document.getElementById(`admin-password-${questionId}`).value;
+        // Submit an answer
+        function submitAnswer(id, button) {
+            const answer = button.previousElementSibling.value;
+            if (!answer) {
+                alert("Answer cannot be empty!");
+                return;
+            }
 
-        fetch(`${apiUrl}/answer`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ questionId, answer, adminUsername, adminPassword })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    loadQuestions();
-                } else {
-                    alert("Invalid credentials or failed to submit answer.");
-                }
-            });
-    }
-
-    loadQuestions();
-</script>
+            fetch(`${apiUrl}/questions/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ answer }),
+            })
+                .then((response) => response.json())
+                .then(() => {
+                    location.reload();
+                })
+                .catch((error) => console.error("Error submitting answer:", error));
+        }
+    </script>
+</body>
+</html>
