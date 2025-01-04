@@ -39,24 +39,30 @@
             text-shadow: 0px 0px 15px rgba(255, 0, 0, 1);
         }
 
-        #black-sun {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 50px;
-            height: 50px;
-            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Black_Sun_symbol.svg/1200px-Black_Sun_symbol.svg.png') no-repeat center;
-            background-size: contain;
+        button {
+            padding: 10px 20px;
+            background: #f00;
+            color: #fff;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #fff;
+            color: #f00;
         }
     </style>
 </head>
 <body>
-    <div id="black-sun"></div>
     <div id="about-box">
         <p>Check out these links:</p>
         <a href="https://www.youtube.com/@nailman" target="_blank">YouTube</a>
         <a href="https://carossa.bandcamp.com/track/roiled-wirehead" target="_blank">Bandcamp</a>
+        <button onclick="window.location.href='index.html'">Home</button>
     </div>
 </body>
 </html>
+
 
