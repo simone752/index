@@ -17,10 +17,9 @@
             align-items: center;
             height: 100vh;
             text-align: center;
-            overflow: hidden;
         }
 
-        #login-box {
+        #home-box {
             background: rgba(0, 0, 0, 0.9);
             border: 2px solid #f00;
             padding: 20px;
@@ -28,126 +27,28 @@
             width: 300px;
         }
 
-        #login-box input {
-            margin: 10px 0;
+        #home-box a {
+            display: block;
+            margin: 20px 0;
             padding: 10px;
-            font-size: 1em;
-            background: #111;
-            border: 1px solid #333;
-            color: #fff;
-            width: 100%;
-        }
-
-        #login-box button {
-            padding: 10px 20px;
-            font-size: 1em;
-            background: #222;
-            border: 1px solid #f00;
+            font-size: 1.5em;
             color: #f00;
-            cursor: pointer;
-            width: 100%;
+            text-decoration: none;
         }
 
-        #login-error {
-            color: red;
-            display: none;
-            margin-top: 10px;
-        }
-
-        .vhs-effect {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            animation: glitch 2s infinite;
-            z-index: 1000;
-        }
-
-        @keyframes glitch {
-            0% {
-                transform: skew(-0.5deg);
-                opacity: 0.7;
-            }
-            25% {
-                transform: skew(0.5deg);
-                opacity: 0.8;
-            }
-            50% {
-                transform: skew(-0.5deg);
-                opacity: 0.9;
-            }
-            75% {
-                transform: skew(0.5deg);
-                opacity: 0.7;
-            }
-            100% {
-                transform: skew(0deg);
-                opacity: 0.6;
-            }
-        }
-
-        h1 {
-            font-size: 3em;
+        #home-box a:hover {
             color: #fff;
-            z-index: 2000;
+            text-shadow: 0px 0px 15px rgba(255, 0, 0, 1);
         }
-
     </style>
 </head>
 <body>
-    <div id="login-box">
-        <p>Enter the credentials to proceed:</p>
-        <input type="text" id="a1" placeholder="Username">
-        <input type="password" id="a2" placeholder="Password">
-        <button id="a3">Login</button>
-        <div id="a4" style="display:none;">Incorrect credentials. Try again.</div> <!-- Initially hidden -->
+    <div id="home-box">
+        <p>Choose your path:</p>
+        <a href="login.html">Login</a>
+        <a href="ask.html">Ask</a>
+        <a href="about.html">About</a>
     </div>
+</body>
+</html>
 
-    <script>
-        // XOR encryption and decryption functions
-        function xor_encrypt(plain_text, key=42) {
-            var encrypted_text = '';
-            for (var i = 0; i < plain_text.length; i++) {
-                encrypted_text += String.fromCharCode(plain_text.charCodeAt(i) ^ key);
-            }
-            return btoa(encrypted_text);  // Base64 encode the result
-        }
-
-        function xor_decrypt(encrypted_str, key=42) {
-            var decoded_str = atob(encrypted_str);  // Base64 decode
-            var decrypted_str = '';
-            for (var i = 0; i < decoded_str.length; i++) {
-                decrypted_str += String.fromCharCode(decoded_str.charCodeAt(i) ^ key);
-            }
-            return decrypted_str;
-        }
-
-        // Encrypted credentials (Base64 + XOR encryption)
-        var encoded_username = 'ZhpET1lCGhoLT1g=';
-        var encoded_password = 'eR5eX1hE';
-
-        // Decrypt the username and password
-        var decrypted_username = xor_decrypt(encoded_username);
-        var decrypted_password = xor_decrypt(encoded_password);
-
-        document.getElementById('a3').addEventListener('click', function() {
-            var input_username = document.getElementById('a1').value;
-            var input_password = document.getElementById('a2').value;
-
-            // Hide error message initially
-            var err = document.getElementById('a4');
-            err.style.display = 'none';
-
-            // Check if the entered credentials match the decrypted ones
-            if (input_username === decrypted_username && input_password === decrypted_password) {
-                // Successful login: show VHS effect
-                document.body.innerHTML = '<h1>Access Granted</h1>';
-                var vhsEffect = document.createElement('div');
-                vhsEffect.classList.add('vhs-effect');
-                document.body.appendChild(vhsEffect);
-                document.body.style.backgroundColor = 'black';
-            } else {
-                // Incorrect credentials: show error message
-                err.style.display = '
