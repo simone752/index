@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unknown Transmission</title>
+    <style>
+        body {
+            background: #000; 
+            color: #fff; 
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        #login-box {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #f00;
+            padding: 20px;
+            text-align: center;
+            width: 300px;
+        }
+        #login-box input {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1em;
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+            width: 100%;
+        }
+        #login-box button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background: #222;
+            border: 1px solid #f00;
+            color: #f00;
+            cursor: pointer;
+            width: 100%;
+        }
+        #login-error {
+            color: red;
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="login-box">
+        <p>Enter the credentials to proceed:</p>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button id="login-button">Login</button>
+        <div id="login-error">Incorrect credentials. Try again.</div>
+    </div>
+
+    <script>
+        document.getElementById('login-button').addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Correct credentials (updated to match input)
+            const correctUsername = 'L0nesh00!er';
+            const correctPassword = 'S4turn';
+
+            if (username === correctUsername && password === correctPassword) {
+                alert('Access Granted');
+                document.body.innerHTML = '<h1>Welcome to the Unknown</h1>';
+            } else {
+                const errorBox = document.getElementById('login-error');
+                errorBox.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
