@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Unknown Transmission</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Creepster', cursive;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        #login-box {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #f00;
+            padding: 20px;
+            text-align: center;
+            width: 300px;
+        }
+
+        #login-box input {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1em;
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+            width: 100%;
+        }
+
+        #login-box button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background: #222;
+            border: 1px solid #f00;
+            color: #f00;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        #login-error {
+            color: red;
+            display: none;
+            margin-top: 10px;
+        }
+
+        .vhs-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            animation: glitch 2s infinite;
+            z-index: 1000;
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: skew(-0.5deg);
+                opacity: 0.7;
+            }
+            25% {
+                transform: skew(0.5deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: skew(-0.5deg);
+                opacity: 0.9;
+            }
+            75% {
+                transform: skew(0.5deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: skew(0deg);
+                opacity: 0.6;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="login-box">
+        <p>Enter the credentials to proceed:</p>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button id="login-button">Login</button>
+        <div id="login-error">Incorrect credentials. Try again.</div>
+    </div>
+
+    <script>
+        function xor_encrypt(plain_text, key=42) {
+            var encrypted_text = '';
+            for (var i = 0; i < plain_text.length; i++) {
+                encrypted_text += String.fromCharCode(plain_text.charCodeAt(i) ^ key);
+            }
+            return btoa(encrypted_text);
+        }
+
+        function xor_decrypt(encrypted_str, key=42) {
+            var decoded_str = atob(encrypted_str);
+            var decrypted_str = '';
+            for (var i = 0; i < decoded_str.length; i++) {
+                decrypted_str += String.fromCharCode(decoded_str.charCodeAt(i) ^ key);
+            }
+            return decrypted_str;
+        }
+
+        var encoded_username = 'ZhpET1lCGhoLT1g=';
+        var encoded_password = 'eR5eX1hE';
+
+        var decrypted_username = xor_decrypt(encoded_username);
+        var decrypted_password = xor_decrypt(encoded_password);
+
+        document.getElementById('login-button').addEventListener('click', function() {
+            var input_username = document.getElementById('username').value;
+            var input_password = document.getElementById('password').value;
+            var err = document.getElementById('login-error');
+            err.style.display = 'none';
+
+            if (input_username === decrypted_username && input_password === decrypted_password) {
+                document.body.innerHTML = '<h1>Access Granted</h1>';
+                var vhsEffect = document.createElement('div');
+                vhsEffect.classList.add('vhs-effect');
+                document.body.appendChild(vhsEffect);
+                document.body.style.backgroundColor = 'black';
+            } else {
+                err.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
