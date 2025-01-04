@@ -17,7 +17,6 @@
             align-items: center;
             height: 100vh;
             text-align: center;
-            overflow: hidden;
         }
 
         #login-box {
@@ -54,64 +53,35 @@
             margin-top: 10px;
         }
 
-        #black-sun {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 50px;
-            height: 50px;
-            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Black_Sun_symbol.svg/1200px-Black_Sun_symbol.svg.png') no-repeat center;
-            background-size: contain;
+        #login-box button:hover {
+            background: #f00;
+            color: #fff;
         }
     </style>
 </head>
 <body>
-    <div id="black-sun"></div>
     <div id="login-box">
         <p>Enter the credentials to proceed:</p>
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
         <button id="login-button">Login</button>
         <div id="login-error">Incorrect credentials. Try again.</div>
+        <button onclick="window.location.href='index.html'">Home</button>
     </div>
 
     <script>
-        // Encryption logic remains the same
-        function xor_encrypt(plain_text, key=42) {
-            var encrypted_text = '';
-            for (var i = 0; i < plain_text.length; i++) {
-                encrypted_text += String.fromCharCode(plain_text.charCodeAt(i) ^ key);
-            }
-            return btoa(encrypted_text);
-        }
-
-        function xor_decrypt(encrypted_str, key=42) {
-            var decoded_str = atob(encrypted_str);
-            var decrypted_str = '';
-            for (var i = 0; i < decoded_str.length; i++) {
-                decrypted_str += String.fromCharCode(decoded_str.charCodeAt(i) ^ key);
-            }
-            return decrypted_str;
-        }
-
-        var encoded_username = 'ZhpET1lCGhoLT1g=';
-        var encoded_password = 'eR5eX1hE';
-
-        var decrypted_username = xor_decrypt(encoded_username);
-        var decrypted_password = xor_decrypt(encoded_password);
+        var correctUsername = 'L0nesh00!er';
+        var correctPassword = 'S4turn';
 
         document.getElementById('login-button').addEventListener('click', function() {
-            var input_username = document.getElementById('username').value;
-            var input_password = document.getElementById('password').value;
+            var inputUsername = document.getElementById('username').value;
+            var inputPassword = document.getElementById('password').value;
             var err = document.getElementById('login-error');
             err.style.display = 'none';
 
-            if (input_username === decrypted_username && input_password === decrypted_password) {
-                document.body.innerHTML = '<h1>Access Granted</h1>';
-                var vhsEffect = document.createElement('div');
-                vhsEffect.classList.add('vhs-effect');
-                document.body.appendChild(vhsEffect);
-                document.body.style.backgroundColor = 'black';
+            if (inputUsername === correctUsername && inputPassword === correctPassword) {
+                alert('Access Granted');
+                document.body.innerHTML = '<h1>Welcome to the Unknown</h1>';
             } else {
                 err.style.display = 'block';
             }
@@ -119,4 +89,5 @@
     </script>
 </body>
 </html>
+
 
