@@ -102,7 +102,7 @@
         <input type="text" id="a1" placeholder="Username">
         <input type="password" id="a2" placeholder="Password">
         <button id="a3">Login</button>
-        <div id="a4">Incorrect credentials. Try again.</div>
+        <div id="a4" style="display:none;">Incorrect credentials. Try again.</div> <!-- Initially hidden -->
     </div>
 
     <script>
@@ -136,6 +136,10 @@
             var input_username = document.getElementById('a1').value;
             var input_password = document.getElementById('a2').value;
 
+            // Hide error message initially
+            var err = document.getElementById('a4');
+            err.style.display = 'none';
+
             // Check if the entered credentials match the decrypted ones
             if (input_username === decrypted_username && input_password === decrypted_password) {
                 // Successful login: show VHS effect
@@ -146,10 +150,4 @@
                 document.body.style.backgroundColor = 'black';
             } else {
                 // Incorrect credentials: show error message
-                var err = document.getElementById('a4');
-                err.style.display = 'block';
-            }
-        });
-    </script>
-</body>
-</html>
+                err.style.display = '
