@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask - Unknown Transmission</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Creepster', cursive;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        #ask-box {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #f00;
+            padding: 20px;
+            text-align: center;
+            width: 300px;
+        }
+
+        #ask-box textarea {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1em;
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+            width: 100%;
+            height: 100px;
+        }
+
+        #ask-box button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background: #222;
+            border: 1px solid #f00;
+            color: #f00;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        #responses {
+            margin-top: 20px;
+        }
+
+        .response {
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #f00;
+        }
+    </style>
+</head>
+<body>
+    <div id="ask-box">
+        <p>Ask a question or leave a comment:</p>
+        <textarea id="question" placeholder="Type your question here"></textarea>
+        <button id="ask-button">Submit</button>
+        <div id="responses"></div>
+    </div>
+
+    <script>
+        document.getElementById('ask-button').addEventListener('click', function() {
+            var question = document.getElementById('question').value;
+            if (question) {
+                var responseBox = document.getElementById('responses');
+                var newResponse = document.createElement('div');
+                newResponse.classList.add('response');
+                newResponse.innerHTML = `<strong>Your question:</strong><p>${question}</p><strong>Response:</strong><p>Thank you for your question. It will be answered soon...</p>`;
+                responseBox.appendChild(newResponse);
+                document.getElementById('question').value = '';
+            }
+        });
+    </script>
+</body>
+</html>
