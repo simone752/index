@@ -28,7 +28,7 @@
             width: 300px;
         }
 
-        #ask-box textarea {
+        #ask-box input, #ask-box textarea {
             margin: 10px 0;
             padding: 10px;
             font-size: 1em;
@@ -36,7 +36,6 @@
             border: 1px solid #333;
             color: #fff;
             width: 100%;
-            height: 100px;
         }
 
         #ask-box button {
@@ -59,11 +58,23 @@
             background: rgba(0, 0, 0, 0.7);
             border: 1px solid #f00;
         }
+
+        #black-sun {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Black_Sun_symbol.svg/1200px-Black_Sun_symbol.svg.png') no-repeat center;
+            background-size: contain;
+        }
     </style>
 </head>
 <body>
+    <div id="black-sun"></div>
     <div id="ask-box">
         <p>Ask a question or leave a comment:</p>
+        <input type="text" id="username" placeholder="Your Username (Max 20 characters)" maxlength="20">
         <textarea id="question" placeholder="Type your question here"></textarea>
         <button id="ask-button">Submit</button>
         <div id="responses"></div>
@@ -71,16 +82,24 @@
 
     <script>
         document.getElementById('ask-button').addEventListener('click', function() {
+            var username = document.getElementById('username').value;
             var question = document.getElementById('question').value;
-            if (question) {
-                var responseBox = document.getElementById('responses');
+            var responses = document.getElementById('responses');
+
+            if (username && question) {
+                var currentDate = new Date();
+                var formattedDate = currentDate.toLocaleString();
+
                 var newResponse = document.createElement('div');
                 newResponse.classList.add('response');
-                newResponse.innerHTML = `<strong>Your question:</strong><p>${question}</p><strong>Response:</strong><p>Thank you for your question. It will be answered soon...</p>`;
-                responseBox.appendChild(newResponse);
+                newResponse.innerHTML = `<strong>${username} (Asked on ${formattedDate}):</strong><p>${question}</p><strong>Response:</strong><p>Thank you for your question. It will be answered soon...</p>`;
+                responses.appendChild(newResponse);
+
+                document.getElementById('username').value = '';
                 document.getElementById('question').value = '';
             }
         });
     </script>
 </body>
 </html>
+
