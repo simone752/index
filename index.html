@@ -106,28 +106,38 @@
     </div>
 
     <script>
-        function z(a) {
-            var b = '';
-            for (var i = 0; i < a.length; i++) {
-                b += String.fromCharCode(a.charCodeAt(i) ^ 42); // XOR encoding
+        // XOR encryption and decryption functions
+        function xor_encrypt(plain_text, key=42) {
+            var encrypted_text = '';
+            for (var i = 0; i < plain_text.length; i++) {
+                encrypted_text += String.fromCharCode(plain_text.charCodeAt(i) ^ key);
             }
-            return b;
+            return btoa(encrypted_text);  // Base64 encode the result
         }
 
+        function xor_decrypt(encrypted_str, key=42) {
+            var decoded_str = atob(encrypted_str);  // Base64 decode
+            var decrypted_str = '';
+            for (var i = 0; i < decoded_str.length; i++) {
+                decrypted_str += String.fromCharCode(decoded_str.charCodeAt(i) ^ key);
+            }
+            return decrypted_str;
+        }
+
+        // Encrypted credentials (Base64 + XOR encryption)
+        var encoded_username = 'ZhpET1lCGhoLT1g=';
+        var encoded_password = 'eR5eX1hE';
+
+        // Decrypt the username and password
+        var decrypted_username = xor_decrypt(encoded_username);
+        var decrypted_password = xor_decrypt(encoded_password);
+
         document.getElementById('a3').addEventListener('click', function() {
-            var c1 = document.getElementById('a1').value;
-            var c2 = document.getElementById('a2').value;
+            var input_username = document.getElementById('a1').value;
+            var input_password = document.getElementById('a2').value;
 
-            // Encrypted (XOR encoded) credentials
-            var e1 = 'M9iO5oFQ='; // base64 encoded 'L0nesh00!er' XOR'd with 42
-            var e2 = 'S0qFrbgz'; // base64 encoded 'S4turn' XOR'd with 42
-
-            // Decrypt the username and password
-            var d1 = z(atob(e1)); 
-            var d2 = z(atob(e2));
-
-            // Check if the input matches the decrypted credentials
-            if (c1 === d1 && c2 === d2) {
+            // Check if the entered credentials match the decrypted ones
+            if (input_username === decrypted_username && input_password === decrypted_password) {
                 // Successful login: show VHS effect
                 document.body.innerHTML = '<h1>Access Granted</h1>';
                 var vhsEffect = document.createElement('div');
@@ -135,6 +145,7 @@
                 document.body.appendChild(vhsEffect);
                 document.body.style.backgroundColor = 'black';
             } else {
+                // Incorrect credentials: show error message
                 var err = document.getElementById('a4');
                 err.style.display = 'block';
             }
