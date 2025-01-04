@@ -5,16 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unknown Transmission</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+
         body {
-            background: #000; 
-            color: #fff; 
-            font-family: 'Courier New', Courier, monospace;
+            background: #000;
+            color: #fff;
+            font-family: 'Creepster', cursive;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             text-align: center;
+            overflow: hidden;
         }
         #login-box {
             background: rgba(0, 0, 0, 0.9);
@@ -46,6 +49,40 @@
             display: none;
             margin-top: 10px;
         }
+
+        .vhs-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://i.pinimg.com/originals/60/d0/4f/60d04f20852d88f92c8d227d9e5d5a90.gif') center center repeat;
+            animation: glitch 2s infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: skew(-0.5deg);
+            }
+            25% {
+                transform: skew(0.5deg);
+            }
+            50% {
+                transform: skew(-0.5deg);
+            }
+            75% {
+                transform: skew(0.5deg);
+            }
+            100% {
+                transform: skew(0deg);
+            }
+        }
+
+        h1 {
+            font-size: 3em;
+        }
+
     </style>
 </head>
 <body>
@@ -71,7 +108,7 @@
             var c2 = document.getElementById('a2').value;
 
             // Encrypted (XOR encoded) credentials
-            var e1 = 'M9iO5oFQ=';
+            var e1 = 'M9iO5oFQ='; 
             var e2 = 'S0qFrbgz';
 
             // Decrypt the username and password
@@ -79,8 +116,12 @@
             var d2 = z(atob(e2));
 
             if (c1 === d1 && c2 === d2) {
-                alert('Access Granted');
-                document.body.innerHTML = '<h1>Welcome to the Unknown</h1>';
+                // Successful login: show VHS effect
+                document.body.innerHTML = '<h1>Access Granted</h1>';
+                var vhsEffect = document.createElement('div');
+                vhsEffect.classList.add('vhs-effect');
+                document.body.appendChild(vhsEffect);
+                document.body.style.backgroundColor = 'black';
             } else {
                 var err = document.getElementById('a4');
                 err.style.display = 'block';
@@ -89,4 +130,3 @@
     </script>
 </body>
 </html>
-
