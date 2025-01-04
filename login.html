@@ -54,42 +54,19 @@
             margin-top: 10px;
         }
 
-        .vhs-effect {
+        #black-sun {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            animation: glitch 2s infinite;
-            z-index: 1000;
-        }
-
-        @keyframes glitch {
-            0% {
-                transform: skew(-0.5deg);
-                opacity: 0.7;
-            }
-            25% {
-                transform: skew(0.5deg);
-                opacity: 0.8;
-            }
-            50% {
-                transform: skew(-0.5deg);
-                opacity: 0.9;
-            }
-            75% {
-                transform: skew(0.5deg);
-                opacity: 0.7;
-            }
-            100% {
-                transform: skew(0deg);
-                opacity: 0.6;
-            }
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Black_Sun_symbol.svg/1200px-Black_Sun_symbol.svg.png') no-repeat center;
+            background-size: contain;
         }
     </style>
 </head>
 <body>
+    <div id="black-sun"></div>
     <div id="login-box">
         <p>Enter the credentials to proceed:</p>
         <input type="text" id="username" placeholder="Username">
@@ -99,6 +76,7 @@
     </div>
 
     <script>
+        // Encryption logic remains the same
         function xor_encrypt(plain_text, key=42) {
             var encrypted_text = '';
             for (var i = 0; i < plain_text.length; i++) {
@@ -141,3 +119,4 @@
     </script>
 </body>
 </html>
+
