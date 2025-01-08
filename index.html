@@ -12,30 +12,21 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            overflow: hidden;
         }
 
-        h1, h2 {
+        h1 {
             color: #ff1c1c;
             text-transform: uppercase;
             font-weight: bold;
             letter-spacing: 0.2em;
             text-align: center;
-            margin: 0;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
+            margin: 20px 0;
             text-shadow: 0 0 8px #ff1c1c;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            margin-top: 30px;
         }
 
         #form-container {
@@ -46,6 +37,9 @@
             box-shadow: 0 0 15px rgba(255, 28, 28, 0.8);
             width: 100%;
             max-width: 400px;
+            position: fixed;
+            bottom: 20px;
+            z-index: 10;
         }
 
         input, textarea, button {
@@ -81,10 +75,17 @@
             transform: scale(0.95);
         }
 
-        #questions {
-            margin-top: 20px;
+        #questions-container {
+            flex-grow: 1;
             width: 100%;
             max-width: 600px;
+            margin-top: 20px;
+            overflow-y: auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        #questions {
             background: #121212;
             border: 1px solid #333;
             border-radius: 8px;
@@ -102,7 +103,7 @@
         }
 
         #links {
-            margin-top: 30px;
+            margin: 20px 0;
             text-align: center;
         }
 
@@ -125,14 +126,16 @@
 </head>
 <body>
     <h1>The Underground Inquiry</h1>
+
+    <div id="questions-container">
+        <div id="questions"></div>
+    </div>
+
     <div id="form-container">
         <input type="text" id="username" placeholder="Enter your username" required>
         <textarea id="question" placeholder="Enter your question" required></textarea>
         <button id="submit-button">Submit</button>
     </div>
-
-    <h2>Questions:</h2>
-    <div id="questions"></div>
 
     <div id="links">
         <a href="https://www.youtube.com/channel/UCNgJMSq9onkoqN1_pWAxOwg/" target="_blank">YouTube</a>
