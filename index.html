@@ -84,22 +84,20 @@
     </style>
 </head>
 <body>
-    <h1>The Underground Inquiry</h1>
-    <div id="form-container">
-        <input type="text" id="username" placeholder="Your Name (Alias)">
-        <textarea id="question" placeholder="Speak your question into the void..."></textarea>
-        <button id="submit-button">Ask</button>
-    </div>
+    <h1>Ask a Question</h1>
+    <input type="text" id="username" placeholder="Enter your username" required>
+    <textarea id="question" placeholder="Enter your question" required></textarea>
+    <button id="submit-button">Submit</button>
 
-    <div id="links">
-        <a href="https://www.youtube.com/channel/UCNgJMSq9onkoqN1_pWAxOwg/" target="_blank">YouTube</a>
-        <a href="https://carossa.bandcamp.com/album/the-pilgrims-of-carossa" target="_blank">Bandcamp</a>
-    </div>
+    <h2>Questions:</h2>
+    <div id="questions"></div>
 
     <script type="module">
+        // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
         import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
 
+        // Firebase configuration
 const firebaseConfig = {
 
   apiKey: "AIzaSyCIGvbNeSZEBjl7Kp4uuJ_Mj2T5y8_1fyQ",
@@ -121,29 +119,48 @@ const firebaseConfig = {
 };
 
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
+        // Submit question to Firebase
         document.getElementById("submit-button").addEventListener("click", () => {
             const username = document.getElementById("username").value.trim();
             const question = document.getElementById("question").value.trim();
 
             if (!username || !question) {
-                alert("Both name and question are required.");
+                alert("Both username and question are required!");
                 return;
             }
 
             push(ref(db, "questions"), {
                 username,
                 question,
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
             });
 
             document.getElementById("username").value = "";
             document.getElementById("question").value = "";
-            alert("Your question has been sent into the void.");
+            alert("Your question has been submitted!");
+        });
+
+        // Fetch and display questions
+        onValue(ref(db, "questions"), (snapshot) => {
+            const questionsDiv = document.getElementById("questions");
+            questionsDiv.innerHTML = "";
+            const data = snapshot.val();
+            if (data) {
+                Object.values(data).forEach((q) => {
+                    const questionDiv = document.createElement("div");
+                    questionDiv.className = "question";
+                    questionDiv.innerHTML = `
+                        <p><strong>${q.username}</strong> (${new Date(q.timestamp).toLocaleString()}):</p>
+                        <p>${q.question}</p>
+                    `;
+                    questionsDiv.appendChild(questionDiv);
+                });
+            }
         });
     </script>
 </body>
 </html>
-
