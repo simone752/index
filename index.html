@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ask a Question</title>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,7 +34,11 @@
     <h2>Questions:</h2>
     <div id="questions"></div>
 
-    <script>
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+
         // Firebase configuration
 const firebaseConfig = {
 
@@ -58,9 +60,10 @@ const firebaseConfig = {
 
 };
 
+
         // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
         // Submit question to Firebase
         document.getElementById("submit-button").addEventListener("click", () => {
@@ -72,7 +75,7 @@ const firebaseConfig = {
                 return;
             }
 
-            db.ref("questions").push({
+            push(ref(db, "questions"), {
                 username,
                 question,
                 timestamp: new Date().toISOString(),
@@ -84,7 +87,7 @@ const firebaseConfig = {
         });
 
         // Fetch and display questions
-        db.ref("questions").on("value", (snapshot) => {
+        onValue(ref(db, "questions"), (snapshot) => {
             const questionsDiv = document.getElementById("questions");
             questionsDiv.innerHTML = "";
             const data = snapshot.val();
