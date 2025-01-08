@@ -3,6 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Underground Inquiry</title>
+    <style>
+        body {
+            background: #0e0e0e;
+            color: #e8e8e8;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #ff4444;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        #form-container {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(255, 68, 68, 0.7);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            background: #0e0e0e;
+            border: 1px solid #333;
+            color: #e8e8e8;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            border-radius: 4px;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #555;
+        }
+
+        button {
+            cursor: pointer;
+            font-weight: bold;
+            background: #ff4444;
+            border: none;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #d83636;
+        }
+
+        #links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #links a {
+            color: #ff4444;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        #links a:hover {
+            color: #e8e8e8;
+        }
+    </style>
+</head>
+<body>
+    <h1>The Underground Inquiry</h1>
+    <div id="form-container">
+        <input type="text" id="username" placeholder="Your Name (Alias)">
+        <textarea id="question" placeholder="Speak your question into the void..."></textarea>
+        <button id="submit-button">Ask</button>
+    </div>
+
+    <div id="links">
+        <a href="https://www.youtube.com/channel/UCNgJMSq9onkoqN1_pWAxOwg/" target="_blank">YouTube</a>
+        <a href="https://carossa.bandcamp.com/album/the-pilgrims-of-carossa" target="_blank">Bandcamp</a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+
+const firebaseConfig = {
+
+  apiKey: "AIzaSyCIGvbNeSZEBjl7Kp4uuJ_Mj2T5y8_1fyQ",
+
+  authDomain: "question-storage.firebaseapp.com",
+
+  databaseURL: "https://question-storage-default-rtdb.europe-west1.firebasedatabase.app",
+
+  projectId: "question-storage",
+
+  storageBucket: "question-storage.firebasestorage.app",
+
+  messagingSenderId: "917752495420",
+
+  appId: "1:917752495420:web:c4a786a0d92736210e7239",
+
+  measurementId: "G-GH8XF83KH9"
+
+};
+
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        document.getElementById("submit-button").addEventListener("click", () => {
+            const username = document.getElementById("username").value.trim();
+            const question = document.getElementById("question").value.trim();
+
+            if (!username || !question) {
+                alert("Both name and question are required.");
+                return;
+            }
+
+            push(ref(db, "questions"), {
+                username,
+                question,
+                timestamp: new Date().toISOString()
+            });
+
+            document.getElementById("username").value = "";
+            document.getElementById("question").value = "";
+            alert("Your question has been sent into the void.");
+        });
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ask a Question</title>
     <style>
         body {
