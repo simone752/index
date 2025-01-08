@@ -3,70 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unknown Transmission</title>
+    <title>Ask a Question</title>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
-
         body {
-            background: #000;
-            color: #fff;
-            font-family: 'Creepster', cursive;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: auto;
         }
-
-        #home-box {
-            background: rgba(0, 0, 0, 0.9);
-            border: 2px solid #f00;
-            padding: 20px;
-            text-align: center;
-            width: 300px;
-        }
-
-        #home-box a {
-            display: block;
-            margin: 20px 0;
-            padding: 10px;
-            font-size: 1.5em;
-            color: #f00;
-            text-decoration: none;
-        }
-
-        #home-box a:hover {
-            color: #fff;
-            text-shadow: 0px 0px 15px rgba(255, 0, 0, 1);
-        }
-
-        #home-box button {
-            padding: 10px 20px;
-            background: #f00;
-            color: #fff;
-            border: none;
-            font-size: 1em;
-            cursor: pointer;
+        input, textarea, button {
             width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 1rem;
         }
-
-        #home-box button:hover {
-            background: #fff;
-            color: #f00;
+        #questions {
+            margin-top: 20px;
+        }
+        .question {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
         }
     </style>
 </head>
 <body>
-    <div id="home-box">
-        <p>Choose your path:</p>
-        <a href="login.html">Login</a>
-        <a href="ask.html">Ask</a>
-        <a href="about.html">About</a>
-        <button onclick="window.location.href='index.html'">Home</button>
-    </div>
+    <h1>Ask a Question</h1>
+    <input type="text" id="username" placeholder="Enter your username" required>
+    <textarea id="question" placeholder="Enter your question" required></textarea>
+    <button id="submit-button">Submit</button>
+
+    <h2>Questions:</h2>
+    <div id="questions"></div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // Submit question to Firebase
+        document.getElementById("submit-button").addEventListener("click", () => {
+            const username = document.getElementById("username").value.trim();
+            const question = document.getElementById("question").value.trim();
+
+            if (!username || !question) {
+                alert("Both username and question are required!");
+                return;
+            }
+
+            db.ref("questions").push({
+                username,
+                question,
+                timestamp: new Date().toISOString(),
+            });
+
+            document.getElementById("username").value = "";
+            document.getElementById("question").value = "";
+            alert("Your question has been submitted!");
+        });
+
+        // Fetch and display questions
+        db.ref("questions").on("value", (snapshot) => {
+            const questionsDiv = document.getElementById("questions");
+            questionsDiv.innerHTML = "";
+            const data = snapshot.val();
+            if (data) {
+                Object.values(data).forEach((q) => {
+                    const questionDiv = document.createElement("div");
+                    questionDiv.className = "question";
+                    questionDiv.innerHTML = `
+                        <p><strong>${q.username}</strong> (${new Date(q.timestamp).toLocaleString()}):</p>
+                        <p>${q.question}</p>
+                    `;
+                    questionsDiv.appendChild(questionDiv);
+                });
+            }
+        });
+    </script>
 </body>
 </html>
-
-
-
